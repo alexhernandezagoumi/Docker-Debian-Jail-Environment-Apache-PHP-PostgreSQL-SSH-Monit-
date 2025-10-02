@@ -1,0 +1,25 @@
+<?php
+$host = 'localhost';  // Host de la base de datos
+$port = '5432';       // Puerto de PostgreSQL
+$dbname = 'bddprueba1'; // Nombre de la base de datos
+$user = 'usuariobdd';     // Usuario de la base de datos
+$password = '*1234Root'; // Contrasena del usuario
+
+// Crear una conexion a la base de datos
+$conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
+
+// Verificar la conexion
+if (!$conn) {
+    echo "Error en la conexion a la base de datos.\n";
+} else {
+    echo "Conexion exitosa a PostgreSQL! <br>";
+    echo "usuario conectado a la base de datos: ${user} <br>";
+    // Realizar una consulta de prueba
+    $result = pg_query($conn, "SELECT version();");
+    $row = pg_fetch_row($result);
+    echo "Version de PostgreSQL: " . $row[0] . "\n";
+}
+
+// Cerrar la conexion
+pg_close($conn);
+?>
