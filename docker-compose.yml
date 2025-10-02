@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  jaildebian:
+    build:
+      context: .
+    image: dockerjail:latest
+    container_name: debianjail
+    ports:
+      - 80:80
+      - 2812:2812
+    restart: always
+    environment:
+      TZ: "Europe/Madrid"
+      USER_NAME: ${USERNAME}
+      USER_PASS: ${PASSWORD}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
+      PUBLIC_KEY: ${PUBLIC_KEY}
+    volumes:
+      - web:/var/www/html
+      - apache_conf:/etc/apache2
+    networks:
+      - red_pps # Ya no especificamos la IP aquí
+volumes:
+  web:
+  apache_conf:
+networks:
+  red_pps:
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16 # Define la subred que contiene tu IP
