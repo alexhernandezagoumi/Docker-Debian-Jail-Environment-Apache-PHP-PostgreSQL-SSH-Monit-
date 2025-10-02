@@ -1,0 +1,18 @@
+set daemon 30
+set logfile /var/log/monit.log
+set httpd port 2812 and
+    use address 0.0.0.0
+    allow admin:admin
+
+check process apache2 with pidfile /var/run/apache2/apache2.pid
+    start program = "/etc/init.d/apache2 start"
+    stop program  = "/etc/init.d/apache2 stop"
+    if failed port 80 protocol http then restart
+    if 5 restarts within 5 cycles then timeout
+
+check process postgres with pidfile /var/lib/postgresql/15/main/postmaster.pid
+    start program = "/etc/init.d/postgresql start"
+    stop program  = "/etc/init.d/postgresql stop"
+    if failed port 5432 protocol pgsql then restart
+    if 5 restarts within 5 cycles then timeout
+
